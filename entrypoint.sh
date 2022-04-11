@@ -17,9 +17,12 @@ IMAGE_ID=ghcr.io/${GITHUB_OWNER}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}
 IMAGE_ID=$(echo ${IMAGE_ID} | tr '[A-Z]' '[a-z]')
 
 
+IMAGE_ID_LATEST=ghcr.io/${GITHUB_OWNER}/${DOCKER_IMAGE_NAME}:latest
+IMAGE_ID_LATEST=$(echo ${IMAGE_ID_LATEST} | tr '[A-Z]' '[a-z]')
+
 # Build image
-echo build -t ${IMAGE_ID} -f ${DOCKERFILE_PATH} ${BUILD_CONTEXT}
-docker build -t ${IMAGE_ID} -f ${DOCKERFILE_PATH} ${BUILD_CONTEXT}
+echo build -t ${IMAGE_ID} -t ${IMAGE_ID_LATEST} -f ${DOCKERFILE_PATH} ${BUILD_CONTEXT}
+docker build -t ${IMAGE_ID} -t ${IMAGE_ID_LATEST} -f ${DOCKERFILE_PATH} ${BUILD_CONTEXT}
 
 # Push image
 docker push ${IMAGE_ID}
