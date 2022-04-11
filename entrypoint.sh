@@ -12,17 +12,21 @@ echo ${GITHUB_PUSH_SECRET} | docker login https://ghcr.io -u ${GITHUB_ACTOR} --p
 # GITHUB_REPOSITORY is always org/repo syntax. Get the owner in case it is different than the actor (when working in an org)
 GITHUB_OWNER=`echo ${GITHUB_REPOSITORY} | cut -d/ -f1`
 
+# Set up repo-id
+REPO_ID=ghcr.io/${GITHUB_OWNER}/${DOCKER_IMAGE_NAME}
+REPO_ID=$(echo ${REPO_ID} | tr '[A-Z]' '[a-z]')
+
 # Set up full image with tag
-IMAGE_ID=ghcr.io/${GITHUB_OWNER}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}
+IMAGE_ID=${REPO_ID}:${DOCKER_IMAGE_TAG}
 IMAGE_ID=$(echo ${IMAGE_ID} | tr '[A-Z]' '[a-z]')
 
-
-IMAGE_ID_LATEST=ghcr.io/${GITHUB_OWNER}/${DOCKER_IMAGE_NAME}:latest
+# Set up full image with 'latest' tag
+IMAGE_ID_LATEST=${REPO_ID}:latest
 IMAGE_ID_LATEST=$(echo ${IMAGE_ID_LATEST} | tr '[A-Z]' '[a-z]')
 
-# Build image
+# Build image and tag with both the version number as Latest
 echo build -t ${IMAGE_ID} -t ${IMAGE_ID_LATEST} -f ${DOCKERFILE_PATH} ${BUILD_CONTEXT}
 docker build -t ${IMAGE_ID} -t ${IMAGE_ID_LATEST} -f ${DOCKERFILE_PATH} ${BUILD_CONTEXT}
 
 # Push image
-docker push ghcr.io/${GITHUB_OWNER}/${DOCKER_IMAGE_NAME}
+docker push ${REPO_ID}
