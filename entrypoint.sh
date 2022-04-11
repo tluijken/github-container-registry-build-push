@@ -25,4 +25,4 @@ echo build -t ${IMAGE_ID} -t ${IMAGE_ID_LATEST} -f ${DOCKERFILE_PATH} ${BUILD_CO
 docker build -t ${IMAGE_ID} -t ${IMAGE_ID_LATEST} -f ${DOCKERFILE_PATH} ${BUILD_CONTEXT}
 
 # Push image
-docker push ${IMAGE_ID}
+docker push ghcr.io/${GITHUB_OWNER}/${DOCKER_IMAGE_NAME}
